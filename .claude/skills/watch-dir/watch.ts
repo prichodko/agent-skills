@@ -8,6 +8,7 @@ const dir = resolve(process.argv[2] || ".");
 console.log(`Watching ${dir}...`);
 
 const watcher = watch(dir, { recursive: true }, (event, path) => {
+  if (path?.startsWith(".git")) return;
   console.log(`${event}: ${path}`);
 });
 
