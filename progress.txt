@@ -2,3 +2,13 @@
 
 create-pr skill expanded: now 9-step workflow with pre-flight checks, local base branch detection, push check, PR template support
 
+agent-browser skill added: browser automation via CLI - navigation, snapshots with @refs, clicks, fills, screenshots, video recording, cookies, network mocking, multi-tab support
+
+install script added: bash installer downloads skills from GitHub API, no jq needed, supports --target flag
+
+README.md added: project overview, curl-based install instructions, skills table
+
+install updated: added skill existence check, shows error + available skills if not found
+
+humanizer skill added: removes AI writing patterns based on Wikipedia's "Signs of AI writing" guide - 24 patterns including inflated symbolism, AI vocabulary, em dash overuse, rule of three, vague attributions
+

@@ -1,5 +1,7 @@
 In all interactions and commit messages, be extremely concise and sacrifice grammar for concision.
 
+After completing any task, update progress.txt with a one-line summary.
+
 # Agent Skills Guide
 
 Skills = reusable instructions Claude loads on-demand via `skill` tool.
