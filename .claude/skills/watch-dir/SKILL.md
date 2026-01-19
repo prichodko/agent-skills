@@ -1,16 +1,18 @@
 ---
-name: bun-watch
-description: Watch directories for file changes using Bun's fs.watch. Use when monitoring files, detecting changes, or building watch-based workflows.
+name: watch-dir
+description: Watch directories for file changes using Node.js fs.watch. Use when monitoring files, detecting changes, or building watch-based workflows.
 ---
 
-# Bun Watch
+# Watch Directory
 
 Watch directory and subdirectories for changes using `fs.watch`.
 
 ## CLI
 
 ```bash
-bun .claude/skills/bun-watch/watch.ts [dir]
+bun .claude/skills/watch-dir/watch.ts [dir]
+# or
+npx tsx .claude/skills/watch-dir/watch.ts [dir]
 ```
 
 Watches `dir` (default: current) recursively. Outputs `event: path` on changes. Ctrl-C to stop.
@@ -61,5 +63,5 @@ process.on("SIGINT", () => {
 ## Notes
 
 - `recursive: true` required for subdirectories
-- `import.meta.dir` = current file's directory
+- `import.meta.dir` = current file's directory (bun only)
 - call `watcher.close()` to stop watching
