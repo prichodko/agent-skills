@@ -7,7 +7,17 @@ description: Watch directories for file changes using Bun's fs.watch. Use when m
 
 Watch directory and subdirectories for changes using `fs.watch`.
 
-## Basic (recursive)
+## CLI
+
+```bash
+bun .claude/skills/bun-watch/watch.ts [dir]
+```
+
+Watches `dir` (default: current) recursively. Outputs `event: path` on changes. Ctrl-C to stop.
+
+## Code Examples
+
+### Basic (recursive)
 
 ```ts
 import { watch } from "fs";
