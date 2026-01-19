@@ -1,0 +1,76 @@
+#!/bin/bash
+set -e
+
+REPO="prichodko/agent-skills"
+BRANCH="main"
+TARGET=".claude/skills"
+API="https://api.github.com/repos/$REPO/contents/.claude/skills"
+RAW="https://raw.githubusercontent.com/$REPO/$BRANCH"
+
+SKILLS=()
+
+# Parse args
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --target) TARGET="$2"; shift 2 ;;
+    *) SKILLS+=("$1"); shift ;;
+  esac
+done
+
+# List available if no skills specified
+if [ ${#SKILLS[@]} -eq 0 ]; then
+  echo "Available skills:"
+  curl -fsSL "$API" | grep '"name"' | cut -d'"' -f4 | while read -r name; do
+    echo "  - $name"
+  done
+  echo ""
+  echo "Usage: curl -fsSL https://raw.githubusercontent.com/$REPO/$BRANCH/install | bash -s -- [--target DIR] <skill1> <skill2> ..."
+  exit 0
+fi
+
+# Recursive download function
+download_dir() {
+  local api_path="$1"
+  local local_path="$2"
+  
+  mkdir -p "$local_path"
+  
+  curl -fsSL "$api_path" | while read -r line; do
+    if echo "$line" | grep -q '"type": "file"'; then
+      # Extract download_url from next few lines
+      :
+    fi
+  done
+  
+  # Parse JSON with grep/sed (no jq dependency)
+  local items=$(curl -fsSL "$api_path")
+  
+  # Get files
+  echo "$items" | grep -E '"name"|"type"|"download_url"' | paste - - - | while read -r entry; do
+    name=$(echo "$entry" | sed 's/.*"name": "\([^"]*\)".*/\1/')
+    type=$(echo "$entry" | sed 's/.*"type": "\([^"]*\)".*/\1/')
+    url=$(echo "$entry" | sed 's/.*"download_url": "\([^"]*\)".*/\1/' | sed 's/.*"download_url": null.*//')
+    
+    if [ "$type" = "file" ] && [ -n "$url" ] && [ "$url" != "null" ]; then
+      echo "  $name"
+      curl -fsSL "$url" -o "$local_path/$name"
+      # Preserve executable for scripts
+      if [[ "$name" == *.sh || "$name" == *.ts ]]; then
+        chmod +x "$local_path/$name"
+      fi
+    elif [ "$type" = "dir" ]; then
+      download_dir "$api_path/$name" "$local_path/$name"
+    fi
+  done
+}
+
+# Download each skill
+for skill in "${SKILLS[@]}"; do
+  echo "Installing $skill..."
+  rm -rf "${TARGET:?}/$skill"
+  download_dir "$API/$skill" "$TARGET/$skill"
+  echo "Installed $skill -> $TARGET/$skill"
+  echo ""
+done
+
+echo "Done!"
