@@ -10,9 +10,7 @@ Watch directory and subdirectories for changes using `fs.watch`.
 ## CLI
 
 ```bash
-bun .claude/skills/watch-dir/watch.ts [dir]
-# or
-npx tsx .claude/skills/watch-dir/watch.ts [dir]
+.claude/skills/watch-dir/watch.ts [dir]
 ```
 
 Watches `dir` (default: current) recursively. Outputs `event: path` on changes. Ctrl-C to stop.
