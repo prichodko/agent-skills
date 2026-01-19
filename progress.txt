@@ -1,2 +1,4 @@
 # Progress Log
 
+create-pr skill expanded: now 9-step workflow with pre-flight checks, local base branch detection, push check, PR template support
+
