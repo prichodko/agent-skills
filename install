@@ -67,6 +67,19 @@ download_dir() {
 # Download each skill
 for skill in "${SKILLS[@]}"; do
   echo "Installing $skill..."
+  
+  # Check if skill exists
+  response=$(curl -sL -w "%{http_code}" "$API/$skill" -o /tmp/skill_response.json)
+  if [ "$response" != "200" ]; then
+    echo "Error: skill '$skill' not found"
+    echo ""
+    echo "Available skills:"
+    curl -fsSL "$API" | grep '"name"' | cut -d'"' -f4 | while read -r name; do
+      echo "  - $name"
+    done
+    exit 1
+  fi
+  
   rm -rf "${TARGET:?}/$skill"
   download_dir "$API/$skill" "$TARGET/$skill"
   echo "Installed $skill -> $TARGET/$skill"
