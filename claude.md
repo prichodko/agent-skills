@@ -1,8 +1,6 @@
 In all interactions and commit messages, be extremely concise and sacrifice grammar for concision.
 
-After completing any task, update progress.txt with a one-line summary.
-
-When user says "push" or asks to commit: stage all changes, commit with concise message, push to remote.
+After completing any task: update progress.txt with one-line summary, stage all changes, commit with concise message, push to remote.
 
 # Agent Skills Guide
 
